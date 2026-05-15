@@ -2,7 +2,7 @@ class MoshCc < Formula
   desc "Mosh fork with terminal rendering patches for Claude Code"
   homepage "https://github.com/rifengg/mosh-cc"
   url "https://github.com/rifengg/mosh-cc/releases/download/v1.5.0-cc.1/mosh-1.5.0-cc.1.tar.gz"
-  sha256 "PLACEHOLDER"
+  sha256 "bccbef7ed593b0c30f55cd6f56365a454ad9fe8de816c49718380baa868bdc4c"
   license "GPL-3.0-or-later"
 
   depends_on "autoconf" => :build
