@@ -1,0 +1,23 @@
+class MoshCc < Formula
+  desc "Mosh fork with terminal rendering patches for Claude Code"
+  homepage "https://github.com/rifengg/mosh-cc"
+  url "https://github.com/rifengg/mosh-cc/releases/download/v1.5.0-cc.1/mosh-1.5.0-cc.1.tar.gz"
+  sha256 "PLACEHOLDER"
+  license "GPL-3.0-or-later"
+
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "pkg-config" => :build
+  depends_on "protobuf"
+
+  def install
+    system "./configure", "--prefix=#{prefix}", "--program-suffix=-cc"
+    inreplace "scripts/mosh.pl", "mosh-server", "mosh-server-cc"
+    system "make", "-j#{ENV.make_jobs}"
+    system "make", "install"
+  end
+
+  test do
+    system bin/"mosh-server-cc", "--help"
+  end
+end
