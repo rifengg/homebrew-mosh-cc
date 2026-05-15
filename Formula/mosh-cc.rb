@@ -8,16 +8,20 @@ class MoshCc < Formula
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "pkg-config" => :build
+  depends_on "openssl@3"
   depends_on "protobuf"
 
   def install
     system "./configure", "--prefix=#{prefix}", "--program-suffix=-cc"
-    inreplace "scripts/mosh.pl", "mosh-server", "mosh-server-cc"
+    inreplace "scripts/mosh.pl", /^my \$client = 'mosh-client';/, "my $client = 'mosh-client-cc';"
+    inreplace "scripts/mosh.pl", /^my \$server = 'mosh-server';/, "my $server = 'mosh-server-cc';"
     system "make", "-j#{ENV.make_jobs}"
     system "make", "install"
   end
 
   test do
-    system bin/"mosh-server-cc", "--help"
+    assert_match "mosh-server", shell_output("#{bin}/mosh-server-cc --help 2>&1", 0)
+    assert_predicate bin/"mosh-cc", :exist?
+    assert_predicate bin/"mosh-client-cc", :exist?
   end
 end
