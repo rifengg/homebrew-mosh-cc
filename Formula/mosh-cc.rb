@@ -19,6 +19,21 @@ class MoshCc < Formula
     system "make", "install"
   end
 
+  def caveats
+    <<~EOS
+      If this machine will HOST sessions (others connect to it via mosh-cc and
+      run tmux + Claude Code here), its tmux config must forward selections to
+      the connecting machine's clipboard. Add to ~/.tmux.conf on the host:
+
+        set -g set-clipboard on
+
+      Without it, text selected in shell panes stays in tmux's internal buffer
+      and never reaches the client's clipboard. Fleet VPS boxes ship this in
+      the canonical fdn-os-config install/cc/tmux.conf; a Mac host uses
+      personal dotfiles, so it must be added here by hand.
+    EOS
+  end
+
   test do
     assert_match "mosh-server", shell_output("#{bin}/mosh-server-cc --help 2>&1", 0)
     assert_predicate bin/"mosh-cc", :exist?
